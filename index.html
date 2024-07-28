@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>P.CH.P IOT Solution</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+    
+    
+        body {
+    font-family: 'Roboto', sans-serif;
+    background: linear-gradient(to right, #00c6ff, #0072ff);
+    color: #fff;
+    text-align: center;
+    padding: 30px;
+    margin: 0;
+    position: relative;
+}
+
+.container {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+    max-width: 1200px; /* Increased max-width */
+    margin: auto;
+}
+
+h1 {
+    font-size: 2.5em;
+    margin-bottom: 20px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+h2 {
+    font-size: 1.8em;
+    margin-bottom: 20px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.device-group {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Adjusted minimum column width */
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.device-buttons {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+button {
+    border: none;
+    outline: none;
+    padding: 15px 30px;
+    margin: 0;
+    background-color: #004aad;
+    color: white;
+    font-size: 1em;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+button:hover {
+    background-color: #00337a;
+    transform: scale(1.05);
+}
+
+.icon {
+    font-size: 2em;
+    transition: transform 0.3s ease-in-out;
+}
+
+.icon-lightbulb { color: yellow; }
+.icon-fan { color: lightblue; }
+.icon-plug { color: green; }
+.icon-wifi { color: cyan; }
+.icon-tv { color: orange; }
+
+@media (max-width: 768px) {
+    .device-group {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.icon:hover {
+    transform: scale(1.2);
+}
+
+button {
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+.device-buttons {
+    animation: fadeIn 0.5s ease-in-out;
+    animation-fill-mode: backwards;
+    animation-delay: 0.2s;
+}
+
+.menu {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+}
+
+.menu .dots {
+    font-size: 24px;
+}
+
+.menu .dropdown {
+    display: none;
+    position: absolute;
+    top: 30px;
+    right: 0;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    text-align: left;
+    z-index: 10;
+}
+
+.menu .dropdown a {
+    display: block;
+    padding: 10px;
+    color: #fff;
+    text-decoration: none;
+    font-size: 1em;
+}
+
+.menu .dropdown a:hover {
+    background-color: #ff5722;
+}
+
+.overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    color: #fff;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    z-index: 20;
+    flex-direction: column;
+}
+
+.overlay .notice {
+    font-size: 1.5em;
+    margin-bottom: 20px;
+}
+
+.overlay .counter {
+    font-size: 2em;
+}
+
+.overlay .close-btn {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background: #ff5722;
+    border: none;
+    color: white;
+    font-size: 1em;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.overlay .close-btn:hover {
+    background: #e64a19;
+}
+
+footer {
+    margin-top: 30px;
+    font-size: 1em;
+    color: #fff;
+}
+
+footer p {
+    margin: 5px 0;
+}
+
+footer a {
+    color: #ff5722;
+    text-decoration: none;
+}
+
+footer a:hover {
+    text-decoration: underline;
+}
+
+.settings-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    color: #fff;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    z-index: 20;
+    flex-direction: column;
+    overflow-y: auto;
+}
+
+.settings-overlay .settings-form {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    width: 80%;
+    max-width: 400px;
+}
+
+.settings-overlay input {
+    padding: 10px;
+    font-size: 1em;
+    border: none;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+.settings-overlay button {
+    padding: 10px 20px;
+    background: #ff5722;
+    border: none;
+    color: white;
+    font-size: 1em;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.settings-overlay button:hover {
+    background: #e64a19;
+}
+
+.settings-overlay .close-btn {
+    margin-top: 10px;
+    padding: 10px 20px;
+    background: #ff5722;
+    border: none;
+    color: white;
+    font-size: 1em;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.settings-overlay .close-btn:hover {
+    background: #e64a19;
+}
+
+.settings-btn-container {
+    margin-top: 20px;
+}
+
+.settings-btn {
+    padding: 10px 20px;
+    background: #ff5722;
+    border: none;
+    color: white;
+    font-size: 1em;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.settings-btn:hover {
+    background: #e64a19;
+}
+
+.token-display {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 10px;
+    border-radius: 5px;
+    max-width: 75%;
+    margin: 20px auto;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.token-display span {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+       
+    </style>
+</head>
+<body>
+    <!-- Three dots menu -->
+    <div class="menu">
+        <i class="dots fas fa-ellipsis-v"></i>
+        <div class="dropdown">
+            <a href="pageno2nd.html" target="_blank">Change UI</a>
+            <a href="temp&hum.html" target="_blank">Temperature & Humidity</a>
+            <a href="#" id="important-notice">Important Notice</a>
+        </div>
+    </div>
+
+    <!-- Important Notice Overlay -->
+    <div class="overlay" id="notice-overlay">
+        <div class="notice">
+            1. Only virtual pins (v1, v2, v3, v4, v5) are supported in this control panel. Make sure to use these virtual pins in your Blynk project for proper functionality.<br>
+            2. When UI is changed and when refresh the page, you have to update the Blynk token again.
+        </div>
+        <button class="close-btn" id="close-btn">Close</button>
+    </div>
+
+    <!-- Settings Overlay -->
+    <div class="settings-overlay" id="settings-overlay">
+        <div class="settings-form">
+            <h2>Update Blynk Token</h2>
+            <input type="text" id="token-input" placeholder="Enter your Blynk token">
+            <button id="update-token">Update Token</button>
+            <button class="close-btn" id="settings-close-btn">Close</button>
+        </div>
+    </div>
+
+    <div class="container">
+        <h1>P.CH.P IOT Solution</h1>
+        <h2>Control Panel</h2>
+
+        <div class="device-group">
+    <div class="device-buttons">
+        <button onclick="s1on()">Switch 1 ON</button>
+        <button onclick="s1off()">Switch 1 OFF</button>
+        <i class="icon fas fa-lightbulb icon-lightbulb"></i>
+        <span id="status-s1">Status <span class="status-text" id="status-text-s1">Unknown</span></span>
+    </div>
+    <div class="device-buttons">
+        <button onclick="s2on()">Switch 2 ON</button>
+        <button onclick="s2off()">Switch 2 OFF</button>
+        <i class="icon fas fa-fan icon-fan"></i>
+        <span id="status-s2">Status <span class="status-text" id="status-text-s2">Unknown</span></span>
+    </div>
+    <div class="device-buttons">
+        <button onclick="s3on()">Switch 3 ON</button>
+        <button onclick="s3off()">Switch 3 OFF</button>
+        <i class="icon fas fa-plug icon-plug"></i>
+        <span id="status-s3">Status <span class="status-text" id="status-text-s3">Unknown</span></span>
+    </div>
+</div>
+
+<div class="device-group">
+    <div class="device-buttons">
+        <button onclick="s4on()">Switch 4 ON</button>
+        <button onclick="s4off()">Switch 4 OFF</button>
+        <i class="icon fas fa-wifi icon-wifi"></i>
+        <span id="status-s4">Status <span class="status-text" id="status-text-s4">Unknown</span></span>
+    </div>
+    <div class="device-buttons">
+        <button onclick="s5on()">Switch 5 ON</button>
+        <button onclick="s5off()">Switch 5 OFF</button>
+        <i class="icon fas fa-tv icon-tv"></i>
+        <span id="status-s5">Status <span class="status-text" id="status-text-s5">Unknown</span></span>
+    </div>
+</div>
+
+        
+        <div class="token-display" id="token-display" style="display: none;">
+            Current Blynk Token: <span id="current-token"></span>
+        </div>
+        <div class="settings-btn-container" id="settings-btn-container">
+            <button class="settings-btn" id="settings">Settings</button>
+        </div>
+    </div>
+
+    <!-- Footer with Developer Information -->
+    <footer>
+        <p>Developer: <strong>Purna Chandra Patra</strong></p>
+        <p>Contact: <a href="mailto:p.p.chandra082003@gmail.com">p.p.chandra082003@gmail.com</a></p>
+    </footer>
+
+    <script>
+        let blynkToken = 'aBt1RXmeHshX2N-d3nzOWcqB-HOCUf8S'; // Default token
+
+        function fetchBlynkAPI(endpoint, value) {
+            fetch(`https://blynk.cloud/external/api/update?token=${blynkToken}&${endpoint}=${value}`);
+        }
+
+        function s1on() {
+            fetchBlynkAPI('v1', 1);
+        }
+
+        function s1off() {
+            fetchBlynkAPI('v1', 0);
+        }
+
+        function s2on() {
+            fetchBlynkAPI('v2', 1);
+        }
+
+        function s2off() {
+            fetchBlynkAPI('v2', 0);
+        }
+
+        function s3on() {
+            fetchBlynkAPI('v3', 1);
+        }
+
+        function s3off() {
+            fetchBlynkAPI('v3', 0);
+        }
+
+        function s4on() {
+            fetchBlynkAPI('v4', 1);
+        }
+
+        function s4off() {
+            fetchBlynkAPI('v4', 0);
+        }
+
+        function s5on() {
+            fetchBlynkAPI('v5', 1);
+        }
+
+        function s5off() {
+            fetchBlynkAPI('v5', 0);
+        }
+
+        // Important Notice functionality
+        document.getElementById('important-notice').addEventListener('click', (event) => {
+            event.preventDefault();
+            const overlay = document.getElementById('notice-overlay');
+            overlay.style.display = 'flex'; // Show the overlay
+
+            setTimeout(() => {
+                overlay.style.display = 'none'; // Hide the overlay after 10 seconds
+            }, 10000); // 10 seconds
+        });
+
+        // Close button functionality
+        document.getElementById('close-btn').addEventListener('click', () => {
+            document.getElementById('notice-overlay').style.display = 'none';
+        });
+
+        // Menu functionality
+        const menu = document.querySelector('.menu');
+        const dropdown = document.querySelector('.dropdown');
+
+        menu.addEventListener('click', () => {
+            dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+        });
+
+        document.addEventListener('click', (event) => {
+            if (!menu.contains(event.target)) {
+                dropdown.style.display = 'none';
+            }
+        });
+
+        // Settings functionality
+        document.getElementById('settings').addEventListener('click', () => {
+            document.getElementById('settings-overlay').style.display = 'flex';
+        });
+
+        document.getElementById('update-token').addEventListener('click', () => {
+            const newToken = document.getElementById('token-input').value;
+            if (newToken) {
+                blynkToken = newToken; // Update token variable
+                document.getElementById('token-display').style.display = 'block'; // Show token display
+                document.getElementById('current-token').textContent = blynkToken; // Update token display
+                document.getElementById('settings-overlay').style.display = 'none'; // Hide settings overlay
+            } else {
+                alert('Please enter a valid token.');
+            }
+        });
+
+        document.getElementById('settings-close-btn').addEventListener('click', () => {
+            document.getElementById('settings-overlay').style.display = 'none';
+        });
+        
+        function fetchStatus(endpoint, callback) {
+    fetch(`https://blynk.cloud/external/api/get?token=${blynkToken}&${endpoint}`)
+        .then(response => response.json())
+        .then(data => {
+            callback(data);
+        })
+        .catch(error => console.error('Error fetching status:', error));
+}
+
+function updateStatus() {
+    fetchStatus('v1', (status) => {
+        document.getElementById('status-text-s1').textContent = status == 1 ? 'ON' : 'OFF';
+    });
+    fetchStatus('v2', (status) => {
+        document.getElementById('status-text-s2').textContent = status == 1 ? 'ON' : 'OFF';
+    });
+    fetchStatus('v3', (status) => {
+        document.getElementById('status-text-s3').textContent = status == 1 ? 'ON' : 'OFF';
+    });
+    fetchStatus('v4', (status) => {
+        document.getElementById('status-text-s4').textContent = status == 1 ? 'ON' : 'OFF';
+    });
+    fetchStatus('v5', (status) => {
+        document.getElementById('status-text-s5').textContent = status == 1 ? 'ON' : 'OFF';
+    });
+}
+
+// Fetch initial status when the page loads
+window.onload = function() {
+    updateStatus();
+};
+
+// Optionally, you can set up a timer to periodically refresh the status
+setInterval(updateStatus, 1000); // Refresh every 1 seconds        
+    </script>
+</body>
+</html>
