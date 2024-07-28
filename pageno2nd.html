@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>P.CH.P IOT Solution</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: radial-gradient(circle, rgba(0,118,255,1) 0%, rgba(0,54,104,1) 100%);
+            color: #fff;
+            text-align: center;
+            padding: 50px;
+            margin: 0;
+            position: relative;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
+            max-width: 500px;
+            margin: auto;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.5);
+        }
+
+        h2 {
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.5);
+        }
+
+        .slider-container {
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 100px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            padding: 15px;
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+            margin: 5px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            border-radius: 50%;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+        }
+
+        input:checked + .slider {
+            background-color: #004aad;
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+
+        .slider-container label {
+            font-size: 1.2em;
+            color: #fff;
+        }
+
+        .slider-container .icon {
+            font-size: 1.5em;
+        }
+
+        .icon-lightbulb {
+            color: yellow;
+        }
+
+        .icon-fan {
+            color: lightblue;
+        }
+
+        .icon-plug {
+            color: green;
+        }
+
+        .icon-wifi {
+            color: cyan;
+        }
+
+        .icon-tv {
+            color: orange;
+        }
+
+        /* Three dots menu styles */
+        .menu {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+        }
+
+        .menu .dots {
+            font-size: 24px;
+        }
+
+        .menu .dropdown {
+            display: none;
+            position: absolute;
+            top: 30px;
+            right: 0;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            text-align: left;
+            z-index: 10;
+        }
+
+        .menu .dropdown a {
+            display: block;
+            padding: 10px;
+            color: #fff;
+            text-decoration: none;
+            font-size: 1em;
+        }
+
+        .menu .dropdown a:hover {
+            background-color: #ff5722;
+        }
+
+        /* Settings Overlay */
+        .settings-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            color: #fff;
+            text-align: center;
+            justify-content: center;
+            align-items: center;
+            z-index: 20;
+            flex-direction: column;
+            overflow-y: auto; /* Ensure settings overlay is scrollable */
+        }
+
+        .settings-overlay .settings-form {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            width: 80%;
+            max-width: 400px;
+        }
+
+        .settings-overlay input {
+            padding: 10px;
+            font-size: 1em;
+            border: none;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        .settings-overlay button {
+            padding: 10px 20px;
+            background: #ff5722;
+            border: none;
+            color: white;
+            font-size: 1em;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .settings-overlay button:hover {
+            background: #e64a19;
+        }
+
+        .settings-overlay .close-btn {
+            margin-top: 10px;
+            padding: 10px 20px;
+            background: #ff5722;
+            border: none;
+            color: white;
+            font-size: 1em;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .settings-overlay .close-btn:hover {
+            background: #e64a19;
+        }
+
+        /* Important Notice Overlay */
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            color: #fff;
+            text-align: center;
+            justify-content: center;
+            align-items: center;
+            z-index: 20;
+            flex-direction: column;
+        }
+
+        .overlay .notice {
+            font-size: 1.5em;
+            margin-bottom: 20px;
+        }
+
+        .overlay .close-btn {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background: #ff5722;
+            border: none;
+            color: white;
+            font-size: 1em;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .overlay .close-btn:hover {
+            background: #e64a19;
+        }
+
+        /* Footer styles */
+        footer {
+            margin-top: 30px;
+            font-size: 1em;
+            color: #fff;
+        }
+
+        footer p {
+            margin: 5px 0;
+        }
+
+        footer a {
+            color: #ff5722;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        .settings-btn-container {
+            margin-top: 20px; /* Adjusted margin-top to place it below the token display */
+        }
+
+        .settings-btn {
+            padding: 10px 20px;
+            background: #ff5722;
+            border: none;
+            color: white;
+            font-size: 1em;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .settings-btn:hover {
+            background: #e64a19;
+        }
+
+        /* Token Display Styles */
+        .token-display {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 10px;
+            border-radius: 5px;
+            max-width: 75%;
+            margin: 20px auto;
+            overflow: hidden; /* Hide overflowing content */
+            text-overflow: ellipsis; /* Add ellipsis for overflowed text */
+            white-space: nowrap; /* Prevent text wrapping */
+            display: none; /* Initially hidden */
+        }
+
+        .token-display span {
+            display: block;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    </style>
+</head>
+<body>
+    <div class="menu">
+        <i class="dots fas fa-ellipsis-v"></i>
+        <div class="dropdown">
+            <a href="index.html" target="_blank">Change UI</a>
+            <a href="temp&hum.html" target="_blank">Temperature & Humidity</a>
+            <a href="#" id="important-notice">Important Notice</a>
+        </div>
+    </div>
+
+    <div class="overlay" id="notice-overlay">
+        <div class="notice">
+            1. Only virtual pins (v1, v2, v3, v4, v5) are supported in this control panel. Make sure to use these virtual pins in your Blynk project for proper functionality.
+            <br>
+            2. When UI is changed and when refresh the page, you have to update the Blynk token again.
+        </div>
+        <button class="close-btn" id="close-btn">Close</button>
+    </div>
+
+    <!-- Settings Overlay -->
+    <div class="settings-overlay" id="settings-overlay">
+        <div class="settings-form">
+            <h2>Update Blynk Token</h2>
+            <input type="text" id="token-input" placeholder="Enter your Blynk token" />
+            <button id="update-token">Update Token</button>
+            <button class="close-btn" id="settings-close-btn">Close</button>
+        </div>
+    </div>
+
+    <div class="container">
+        <h1>P.CH.P IOT Solution</h1>
+        <h2>Control Panel</h2>
+
+        <div class="slider-container">
+            <label for="switch1">Switch 1</label>
+            <label class="switch">
+                <input type="checkbox" id="switch1" onchange="toggleSwitch(1, this)">
+                <span class="slider"></span>
+            </label>
+            <i class="icon fas fa-lightbulb icon-lightbulb"></i>
+            <span id="status-s1">Status<br> <span class="status-text" id="status-text-s1">Unknown</span></span>
+        </div>
+
+        <div class="slider-container">
+            <label for="switch2">Switch 2</label>
+            <label class="switch">
+                <input type="checkbox" id="switch2" onchange="toggleSwitch(2, this)">
+                <span class="slider"></span>
+            </label>
+            <i class="icon fas fa-fan icon-fan"></i>
+            <span id="status-s2">Status <br><span class="status-text" id="status-text-s2">Unknown</span></span>
+        </div>
+
+        <div class="slider-container">
+            <label for="switch3">Switch 3</label>
+            <label class="switch">
+                <input type="checkbox" id="switch3" onchange="toggleSwitch(3, this)">
+                <span class="slider"></span>
+            </label>
+            <i class="icon fas fa-plug icon-plug"></i>
+            <span id="status-s3">Status <br><span class="status-text" id="status-text-s3">Unknown</span></span>
+        </div>
+
+        <div class="slider-container">
+            <label for="switch4">Switch 4</label>
+            <label class="switch">
+                <input type="checkbox" id="switch4" onchange="toggleSwitch(4, this)">
+                <span class="slider"></span>
+            </label>
+            <i class="icon fas fa-wifi icon-wifi"></i>
+            <span id="status-s4">Status <br><span class="status-text" id="status-text-s4">Unknown</span></span>
+        </div>
+
+        <div class="slider-container">
+            <label for="switch5">Switch 5</label>
+            <label class="switch">
+                <input type="checkbox" id="switch5" onchange="toggleSwitch(5, this)">
+                <span class="slider"></span>
+            </label>
+            <i class="icon fas fa-tv icon-tv"></i>
+            <span id="status-s5">Status <br><span class="status-text" id="status-text-s5">Unknown</span></span>
+        </div>
+        
+        <div class="settings-btn-container" id="settings-btn-container">
+            <div class="token-display" id="token-display">
+                Current Token: <span id="current-token">aBt1RXmeHshX2N-d3nzOWcqB-HOCUf8S</span>
+            </div>
+            <button class="settings-btn" id="settings">Settings</button>
+        </div>
+    </div>
+
+    <footer>
+        <p>Developer: <strong>Purna Chandra Patra</strong></p>
+        <p>Contact: <a href="mailto:p.p.chandra082003@gmail.com">p.p.chandra082003@gmail.com</a></p>
+    </footer>
+
+    <script>
+        let blynkToken = 'aBt1RXmeHshX2N-d3nzOWcqB-HOCUf8S'; // Default token
+
+        function toggleSwitch(switchNumber, checkbox) {
+            var state = checkbox.checked ? 1 : 0;
+            var url = `https://blynk.cloud/external/api/update?token=${blynkToken}&v${switchNumber}=${state}`;
+
+            fetch(url);
+        }
+
+        // Initialize the token display
+        document.getElementById('token-display').style.display = 'none'; // Hide initially
+
+        // Important Notice functionality
+        document.getElementById('important-notice').addEventListener('click', (event) => {
+            event.preventDefault();
+            const overlay = document.getElementById('notice-overlay');
+            overlay.style.display = 'flex'; // Show the overlay
+
+            setTimeout(() => {
+                overlay.style.display = 'none'; // Hide the overlay after 10 seconds
+            }, 10000); // 10 seconds
+        });
+
+        // Close button functionality
+        document.getElementById('close-btn').addEventListener('click', () => {
+            document.getElementById('notice-overlay').style.display = 'none';
+        });
+
+        // Menu functionality
+        const menu = document.querySelector('.menu');
+        const dropdown = document.querySelector('.dropdown');
+
+        menu.addEventListener('click', () => {
+            dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+        });
+
+        document.addEventListener('click', (event) => {
+            if (!menu.contains(event.target)) {
+                dropdown.style.display = 'none';
+            }
+        });
+
+        // Settings functionality
+        document.getElementById('settings').addEventListener('click', () => {
+            document.getElementById('settings-overlay').style.display = 'flex';
+        });
+
+        document.getElementById('update-token').addEventListener('click', () => {
+            const newToken = document.getElementById('token-input').value;
+            if (newToken) {
+                blynkToken = newToken;
+                document.getElementById('current-token').textContent = blynkToken; // Update token display
+                document.getElementById('token-display').style.display = 'block'; // Show token display
+                document.getElementById('settings-overlay').style.display = 'none';
+                document.getElementById('settings-btn-container').style.display = 'block'; // Show settings button
+                // Call function to fetch and display data
+                fetchData();
+            } else {
+                alert('Please enter a valid token.');
+            }
+        });
+
+        document.getElementById('settings-close-btn').addEventListener('click', () => {
+            document.getElementById('settings-overlay').style.display = 'none';
+        });
+        
+        function fetchStatus(endpoint, callback) {
+    fetch(`https://blynk.cloud/external/api/get?token=${blynkToken}&${endpoint}`)
+        .then(response => response.json())
+        .then(data => {
+            callback(data);
+        })
+        .catch(error => console.error('Error fetching status:', error));
+}
+
+function updateStatus() {
+    fetchStatus('v1', (status) => {
+        document.getElementById('status-text-s1').textContent = status == 1 ? 'ON' : 'OFF';
+    });
+    fetchStatus('v2', (status) => {
+        document.getElementById('status-text-s2').textContent = status == 1 ? 'ON' : 'OFF';
+    });
+    fetchStatus('v3', (status) => {
+        document.getElementById('status-text-s3').textContent = status == 1 ? 'ON' : 'OFF';
+    });
+    fetchStatus('v4', (status) => {
+        document.getElementById('status-text-s4').textContent = status == 1 ? 'ON' : 'OFF';
+    });
+    fetchStatus('v5', (status) => {
+        document.getElementById('status-text-s5').textContent = status == 1 ? 'ON' : 'OFF';
+    });
+}
+
+// Fetch initial status when the page loads
+window.onload = function() {
+    updateStatus();
+};
+
+// Optionally, you can set up a timer to periodically refresh the status
+setInterval(updateStatus, 1000); // Refresh every 1 seconds
+   
+   
+function setSwitchPosition(switchId, status) {
+    const switchElement = document.getElementById(`switch${switchId}`);
+    switchElement.checked = status === 1;
+}
+
+function updateSwitchPositions() {
+    fetchStatus('v1', (status) => {
+        setSwitchPosition(1, status);
+        document.getElementById('status-text-s1').textContent = status == 1 ? 'ON' : 'OFF';
+    });
+    fetchStatus('v2', (status) => {
+        setSwitchPosition(2, status);
+        document.getElementById('status-text-s2').textContent = status == 1 ? 'ON' : 'OFF';
+    });
+    fetchStatus('v3', (status) => {
+        setSwitchPosition(3, status);
+        document.getElementById('status-text-s3').textContent = status == 1 ? 'ON' : 'OFF';
+    });
+    fetchStatus('v4', (status) => {
+        setSwitchPosition(4, status);
+        document.getElementById('status-text-s4').textContent = status == 1 ? 'ON' : 'OFF';
+    });
+    fetchStatus('v5', (status) => {
+        setSwitchPosition(5, status);
+        document.getElementById('status-text-s5').textContent = status == 1 ? 'ON' : 'OFF';
+    });
+}
+
+// Fetch initial switch positions when the page loads
+window.onload = function() {
+    updateSwitchPositions();
+};
+
+// Optionally, you can set up a timer to periodically refresh the switch positions
+setInterval(updateSwitchPositions, 1000); // Refresh every 1 second
+</script>
+
+</body>
+</html>
